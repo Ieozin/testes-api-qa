@@ -1,4 +1,5 @@
 const { spec, request } = require("pactum");
+const { like, string } = require("pactum-matchers");
 
 request.setBaseUrl("http://lojaebac.ebaconline.art.br");
 
@@ -16,29 +17,45 @@ describe("Testes de produtos", () => {
       .returns("data.token");
   });
 
-  it("Cria produto", async () => {
+  it("Deve criar um produto com sucesso", async () => {
     const response = await spec()
       .post("/api/addProduct")
       .withHeaders("authorization", token)
       .withJson({
-        name: "Iphone 16",
-        price: 5000.0,
-        quantity: 500,
-        categories: "Celular",
-        description: "Celular Iphone com 128gb",
-        photos: "any",
-        popular: 10,
+        name: "Camiseta EBAC",
+        price: 159.99,
+        quantity: 50,
+        categories: ["6543a21b1c9d440001abc124"],
+        description: "Camiseta 100% algodão",
+        photos: ["https://exemplo.com/camiseta-bonita.jpg"],
+        popular: true,
         visible: true,
-        location: "any",
-        additionalDetails: "6gb De RAM",
-        specialPrice: 4500.0,
       })
-      .expectStatus(200);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "product added",
+        data: {
+          categories: like(["6543a21b1c9d440001abc124"]),
+          photos: like(["https://exemplo.com/camiseta-bonita.jpg"]),
+          visible: true,
+          additionalDetails: [],
+          _id: like(""),
+          name: string("Camiseta EBAC"),
+          price: like(159.99),
+          quantity: like(50),
+          description: string("Camiseta 100% algodão"),
+          popular: true,
+          specialPrice: like(149.99),
+          createdAt: string("2025-03-05T22:57:00.453Z"),
+          
+        },
+      });
 
     productId = response.body.data._id;
   });
 
-  it("Edita produto", async () => {
+  it("Deve editar um produto existente com sucesso", async () => {
     await spec()
       .put(`/api/editProduct/${productId}`)
       .withHeaders("authorization", token)
@@ -46,13 +63,21 @@ describe("Testes de produtos", () => {
         name: "Iphone 16 Pro",
         price: 5500.0,
       })
-      .expectStatus(200);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "product updated",
+      });
   });
 
-  it("Deleta produto", async () => {
+  it("Deve deletar um produto existente com sucesso", async () => {
     await spec()
       .delete(`/api/deleteProduct/${productId}`)
       .withHeaders("authorization", token)
-      .expectStatus(200);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "product deleted",
+      });
   });
 });

@@ -4,7 +4,7 @@
   "description": "Repositorio de atividade - Teste de API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./testes/*.spec.js"
+    "test": "mocha ./testes/./**/*.spec.js"
   },
   "author": "Leonardo Martins",
   "license": "ISC",

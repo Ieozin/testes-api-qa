@@ -1,4 +1,5 @@
 const { spec, request } = require("pactum");
+const { like, string } = require("pactum-matchers");
 
 request.setBaseUrl("http://lojaebac.ebaconline.art.br");
 
@@ -16,7 +17,7 @@ describe("Testes de categorias", () => {
       .returns("data.token");
   });
 
-  it("Cria categoria", async () => {
+  it("Deve criar uma categoria com sucesso", async () => {
     const response = await spec()
       .post("/api/addCategory")
       .withHeaders("authorization", token)
@@ -24,12 +25,23 @@ describe("Testes de categorias", () => {
         name: "Celulares",
         photo: "any",
       })
-      .expectStatus(200);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "category added",
+        data: {
+          _id: like(""),
+          name: string("Celulares baratos"),
+          photo: string("any"),
+          createdAt: string("2025-03-05T22:48:17.646Z"),
+          
+        },
+      });
 
     categoryId = response.body.data._id;
   });
 
-  it("Edita categoria", async () => {
+  it("Deve editar uma categoria existente com sucesso", async () => {
     await spec()
       .put(`/api/editCategory/${categoryId}`)
       .withHeaders("authorization", token)
@@ -37,19 +49,21 @@ describe("Testes de categorias", () => {
         name: "Celulares baratos",
         photo: "any",
       })
-      .expectStatus(200);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "category updated",
+      });
   });
 
-  it("Deleta categoria", async () => {
+  it("Deve excluir uma categoria existente com sucesso", async () => {
     await spec()
       .delete(`/api/deleteCategory/${categoryId}`)
       .withHeaders("authorization", token)
-      .expectStatus(200);
-  });
-
-  after(async () => {
-    await spec()
-      .delete(`/api/deleteCategory/${categoryId}`)
-      .withHeaders("authorization", token);
+      .expectStatus(200)
+      .expectJsonMatch({
+        success: true,
+        message: "category deleted",
+      });
   });
 });
