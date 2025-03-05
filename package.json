@@ -1,0 +1,17 @@
+{
+  "name": "teste-api",
+  "version": "1.0.0",
+  "description": "Repositorio de atividade - Teste de API",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./testes/*.spec.js"
+  },
+  "author": "Leonardo Martins",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^11.1.0",
+    "pactum": "^3.7.6",
+    "pactum-flow-plugin": "^0.1.4",
+    "pactum-matchers": "^1.1.7"
+  }
+}
