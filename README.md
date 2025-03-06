@@ -33,6 +33,7 @@ Também incluímos validações de contrato para garantir que as respostas da AP
 ├── pactum.setup.js
 ├── package.json
 └── README.md
+```
 
 Contribuição 🤝
 Encontrou um problema ou tem uma sugestão? Sinta-se à vontade para:
