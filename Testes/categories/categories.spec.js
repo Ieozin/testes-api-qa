@@ -1,5 +1,6 @@
 const { spec, request } = require("pactum");
-const { like, string } = require("pactum-matchers");
+const { like } = require("pactum-matchers");
+const { categorySchema } = require("./category.schema");
 
 request.setBaseUrl("http://lojaebac.ebaconline.art.br");
 
@@ -26,17 +27,7 @@ describe("Testes de categorias", () => {
         photo: "any",
       })
       .expectStatus(200)
-      .expectJsonMatch({
-        success: true,
-        message: "category added",
-        data: {
-          _id: like(""),
-          name: string("Celulares baratos"),
-          photo: string("any"),
-          createdAt: string("2025-03-05T22:48:17.646Z"),
-          
-        },
-      });
+      .expectJsonMatch(categorySchema);
 
     categoryId = response.body.data._id;
   });

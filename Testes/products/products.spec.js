@@ -1,5 +1,6 @@
 const { spec, request } = require("pactum");
-const { like, string } = require("pactum-matchers");
+const { like } = require("pactum-matchers");
+const { productSchema } = require("./product.schema");
 
 request.setBaseUrl("http://lojaebac.ebaconline.art.br");
 
@@ -32,25 +33,7 @@ describe("Testes de produtos", () => {
         visible: true,
       })
       .expectStatus(200)
-      .expectJsonMatch({
-        success: true,
-        message: "product added",
-        data: {
-          categories: like(["6543a21b1c9d440001abc124"]),
-          photos: like(["https://exemplo.com/camiseta-bonita.jpg"]),
-          visible: true,
-          additionalDetails: [],
-          _id: like(""),
-          name: string("Camiseta EBAC"),
-          price: like(159.99),
-          quantity: like(50),
-          description: string("Camiseta 100% algodão"),
-          popular: true,
-          specialPrice: like(149.99),
-          createdAt: string("2025-03-05T22:57:00.453Z"),
-          
-        },
-      });
+      .expectJsonMatch(productSchema);
 
     productId = response.body.data._id;
   });
