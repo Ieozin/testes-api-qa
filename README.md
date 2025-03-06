@@ -43,7 +43,7 @@ Abrir uma issue
 Propor melhorias via Pull Request
 
 Licença ⚖️
-Este projeto está sob licença MIT - veja o arquivo LICENSE para detalhes.
+Este projeto está sob licença MIT.
 
 Desenvolvido com ☕ por Leonardo martins
 
